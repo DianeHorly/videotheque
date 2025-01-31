@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Modifier un film{% endblock %}
+
+{% block content %}
+    <h2>Modifier le film : {{ film.title }}</h2>
+    <form action="{{ url_for('edit_film', title=film.Title )}}" method="post">
+        <label for="title">Titre :</label>
+        <input type="text" id="title" name="title" value="{{ film.Title }}" required>
+        
+        <label for="writer">Réalisateur :</label>
+        <input type="text" id="writer" name="writer" value="{{ film.writer }}" required><br><br>
+    
+        <label for="year">Année :</label>
+        <input type="number" id="year" name="year" value="{{ film.year }}" required>
+
+        <label for="genre">Genre :</label>
+        <input type="text" id="genre" name="genre" value="{{ film.genre|join(', ') }}" required>
+        
+        <label for="format">Format :</label>
+        <input type="text" id="format" name="format" value="{{ film.format }}"><br><br>
+    
+        <label for="actors">Acteurs :</label>
+        <input type="text" id="actors" name="actors" value="{{ film.actors|join(', ') }}"><br><br>
+
+        <button type="submit">Modifier</button>
+    </form>
+{% endblock %}

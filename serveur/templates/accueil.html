@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>Page d'accueil</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style2.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<!-- Section Home (statique) -->
+<section class="home container" id="home">
+    <img src="{{ url_for('static', filename='images/6-Underground.jpg') }}" alt="" class="home-img">
+    <div class="home-text">
+        <h1 class="home-title">Underground 6</h1>
+        <p>sortie en 2008</p><br>
+        <p>Réalisé par : Diane English</p>
+        <a href="#" class="watch-btn">
+            <i class='bx bx-right-arrow'></i>
+            <span>Regarder</span>
+        </a>
+    </div>
+</section>
+
+<!-- Section Films et Shows -->
+<section class="movies container" id="movies">
+    <div class="heading">
+        <h2 class="heading-title">Films et show</h2>
+    </div>
+    <div class="movies-content">
+
+        {% for film in films %}
+        <div class="movie-image">
+            <!-- Affichage des posters -->
+            <img src="{{ film.Poster }}" alt="{{ film.Title }}">
+        </div>
+        <div class="movie-info" id="movie-info{{ loop.index }}">
+            <h2>{{ film.Title }}</h2>
+            <p><strong>Année :</strong> {{ film.Year }}</p>
+            <p><strong>Durée :</strong> {{ film.Runtime }}</p>
+            <p><strong>Genres :</strong> {{ film.Genre | join(', ') }}</p>
+            <p><strong>Synopsis :</strong>
+                {% if film.Plot %}
+                    {{ film.Plot[:100] }}...
+                {% else %}
+                    Non disponible.
+                {% endif %}
+            </p>
+            <p><strong>Ajouté par :</strong> {{ film.add_by }}</p>
+            {% if session.username == film.add_by %}
+                <a href="{{ url_for('edit_film', title=film['Title']) }}">{{ film['Title'] }} class="btn btn-primary btn-sm">Modifier</a>
+                <form action="{{ url_for('delete_film', title=film['Title']) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm"> Supprimer </button>
+                </form>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Scripts JS -->
+<script src="{{ url_for('static', filename='js/swiper-bundle.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+{% endblock %}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, nofollow">
+    <title>{% block title %}Ma Videothèque{% endblock %}</title>
+    
+    <!-- Liens CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style1.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/swiper-bundle.min.css') }}">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+    <!-- Favicon 
+    <link rel="icon" href="{{ url_for('static', filename='images/Favicon.ico') }}" type="image/x-icon">  -->
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="nav container">
+            <h1 class="logo"><a href="{{ url_for('accueil') }}">Ma Videothèque</a></h1>
+            
+            <div class="navbar">
+                <a href="{{ url_for('accueil') }}" class="nav-link {% if request.endpoint == 'accueil' %}nav-active{% endif %}">
+                    <i class='bx bx-home'></i>
+                    <span class="nav-link-title">Accueil</span>
+                </a>
+                <a href="{{ url_for('films') }}" class="nav-link {% if request.endpoint == 'films' %}nav-active{% endif %}">
+                    <i class='bx bx-tv'></i>
+                    <span class="nav-link-title">Liste des Films</span>
+                </a>
+                {% if session.username %}
+                    <a href="{{ url_for('add_film') }}" class="nav-link {% if request.endpoint == 'add_film' %}nav-active{% endif %}">
+                        <i class='bx bx-plus-circle'></i>
+                        <span class="nav-link-title">Ajout Film</span>
+                    </a>
+                    
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="nav-link" data-action="logout">
+                        <i class='bx bx-log-out'></i>
+                        <span class="nav-link-title">Déconnexion</span>
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="nav-link {% if request.endpoint == 'login' %}nav-active{% endif %}" data-action="login">
+                        <i class='bx bx-user'></i>
+                        <span class="nav-link-title">Connexion</span>
+                    </a>
+                    <a href="{{ url_for('register') }}" class="nav-link {% if request.endpoint == 'register' %}nav-active{% endif %}">
+                        <i class='bx bx-user-plus'></i>
+                        <span class="nav-link-title">Inscription</span>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="container">
+        <!-- Messages Flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flashes">
+                    {% for category, message in messages %}
+                        <div class="alert {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer container">
+            <p>&copy; {{ current_year }} Ma Videothèque - Tous droits réservés</p>
+            <p>Développé avec <i class='bx bx-heart'></i> par MODJOM ET FATMA</p>
+        </div>
+    </footer>
+
+    <!-- Liens JS -->
+    <script src="{{ url_for('static', filename='JS/main.js') }}" defer></script>
+</body>
+
+</html>

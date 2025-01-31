@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Liste des Films{% endblock %}
+
+{% block head %}
+     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/films.css') }}">
+{% endblock %}
+
+{% set page = page or 1 %}
+
+{% block content %}
+    <h2>Liste des films</h2>
+    
+    <!-- Formulaire de recherche -->
+    <form method="GET" action="{{ url_for('search_films') }}">
+        <input type="text" name="title" placeholder="Rechercher par titre">
+        <button type="submit">Rechercher</button>
+    </form>
+
+    <!-- Tableau des films -->
+    <table border="1.5" cellspacing="0" cellpadding="6">
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Année</th>
+                <th>Genre</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if films %}
+                {% for film in films %}
+                    <tr>
+                        <td>{{ film.Title }}</td>
+                        <td>{{ film.Year }}</td>
+                        <td>{{ film.Genre | join(", ") }}</td>
+                        <td>
+                            <a href="{{ url_for('edit_film', title=film.Title) }}">Modifier</a>
+                            
+                            <!-- Formulaire pour la suppression -->
+                            <form action="{{ url_for('delete_film', title=film.Title) }}" method="POST" style="display: inline;">
+                                <button type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce film ?');">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4" style="text-align: center;">Aucun film trouvé.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        {% if page > 1 %}
+            <a href="{{ url_for('films', page=page-1) }}">Précédent</a>
+        {% endif %}
+        <a href="{{ url_for('films', page=page+1) }}">Suivant</a>
+    </div>
+{% endblock %}

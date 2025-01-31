@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Déconnexion{% endblock %}
+
+{% block content %}
+    <h2>Déconnexion réussie</h2>
+    <p>Vous avez été déconnecté avec succès.</p>
+    <a href="{{ url_for('login') }}">Se reconnecter</a>
+{% endblock %}

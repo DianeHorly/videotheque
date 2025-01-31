@@ -1,0 +1,24 @@
+<!-- page pour visualiser un film avec ses informations -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Détails du film</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style1.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ film.Title }}</h1>
+        <img src="{{ film.Poster }}" alt="{{ film.Title }}">
+        <p><strong>Année :</strong> {{ film.Year }}</p>
+        <p><strong>Durée :</strong> {{ film.Runtime }}</p>
+        <p><strong>Genres :</strong> {{ film.Genre | join(', ') }}</p>
+        <p><strong>Synopsis :</strong> {{ film.Plot }}</p>
+        <p><strong>Ajouté par :</strong> {{ film.add_by }}</p>
+        <a href="{{ url_for('edit_film', title=film.Title) }}" class="btn btn-warning mt-3">Modifier</a>
+        <form action="{{ url_for('delete_film', title=film.Title) }}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-danger mt-3">Supprimer</button>
+        </form>
+    </div>
+</body>
+</html>

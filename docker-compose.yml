@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "admin"
+      MONGO_INITDB_ROOT_PASSWORD: "admin123"
+      MONGO_INITDB_DATABASE: "videotheque"
+    networks:
+      - app-network
+    
+  api:
+    build: ./api
+    container_name: api
+    ports:
+      - "5001:5001"
+    environment:
+      MONGO_URI: "mongodb://admin:admin123@mongodb:27017/videotheque"
+    depends_on:
+      - mongodb
+    volumes:
+      - ./api:/app
+    networks:
+      - app-network  
+
+  serveur:
+    build: ./serveur
+    container_name: serveur
+    ports:
+      - "5002:5002"
+    environment:
+      API_URL: "http://api:5001"
+    volumes:
+      - ./serveur:/app
+    depends_on:
+      - api
+    networks:
+      - app-network
+ 
+volumes:
+  mongo_data:
+
+networks:
+  app-network:
+    driver: bridge

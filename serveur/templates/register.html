@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %} Inscription {% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/styles.css') }}">
+{% endblock %}
+
+{% block content %}
+    <!-- Formulaire d'inscription -->
+    <div class="connexion">
+
+        <span class="icon-close">
+            <ion-icon name="close"></ion-icon>
+        </span>
+
+        <div class="form-box registration">
+            <h2>Inscription</h2>
+            <form  action="{{ url_for('register') }}" method="POST">
+
+                <div class="input-box">
+                    <span class="icon">
+                        <ion-icon name="person"></ion-icon>
+                    </span>
+                    <input type="text" name="username" required>
+                    <label for="username">Nom d'utilisateur</label>
+                </div>
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="mail-outline"></ion-icon>
+                    </span>
+                    <input type="email" name="email" required>
+                    <label for="email">Email</label>
+                </div>
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon>
+                    </span>
+                    <input type="password" name="password" required>
+                    <label for="password">Mot de passe</label>
+                </div>
+                <div class="remember-forget">
+                    <label>
+                        <input type="checkbox" name="terms"> Accepter la politique et les conditions
+                    </label>
+                </div>
+                <button type="submit" class="btn">Suivant</button>
+                <div class="login-register">
+                   <p>Vous avez déjà un compte?  cliquez ici
+                        <a href="{{ url_for('login') }}" class="register-link">Connexion</a>
+                   </p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='JS/script.js') }}"></script>
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+{% endblock %}

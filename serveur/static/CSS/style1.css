@@ -1,0 +1,128 @@
+/* Styles généraux */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #333;
+    background-color: #f5f5f5;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Conteneur principal */
+.container {
+    flex: 1; /* Permet d'occuper tout l'espace disponible pour pousser le footer vers le bas */
+    padding: 20px;
+}
+
+/* Header */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+}
+
+header .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header .logo a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+header .navbar {
+    display: flex;
+    gap: 15px;
+}
+
+header .navbar .nav-link {
+    text-decoration: none;
+    color: #ccc;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.3s ease;
+}
+
+header .navbar .nav-link:hover,
+header .navbar .nav-active {
+    color: #fff;
+}
+
+header .navbar .nav-link-title {
+    display: inline-block;
+}
+
+@media (max-width: 768px) {
+    header .navbar {
+        flex-direction: column;
+    }
+    header .navbar .nav-link {
+        margin-bottom: 10px;
+    }
+}
+
+
+/* Messages flash */
+.flashes {
+    margin: 20px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #e7f3ff;
+    color: #0056b3;
+}
+
+.alert {
+    margin-bottom: 10px;
+}
+
+.alert.error {
+    background-color: #ffe7e7;
+    color: #b30000;
+}
+
+.alert.success {
+    background-color: #e7ffe7;
+    color: #006600;
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 20px;
+    margin-top: auto; /* Force le footer à rester en bas */
+}
+
+footer p {
+    margin: 5px 0;
+}
+
+footer i {
+    color: red;
+}
+
+/* Liens */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
