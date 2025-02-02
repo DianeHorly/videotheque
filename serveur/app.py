@@ -116,35 +116,7 @@ def films():
         title_query=title_query
     )
 
-"""
-# ---route vers la page de films ---
-@app.route("/films", methods=['GET'])
-def films(): 
-    Affiche la liste de tous les films présents dans la base, avec la possibilité de les filtrer par titre.
-    page = int(request.args.get('page', 1))
-    title_query = request.args.get('Title', '')  # Recherche par titre
-    films_per_page = 10
-    skip = (page - 1) * films_per_page
 
-    try:
-        response = requests.get(f"{API_URL}/films")
-        print("statut : {}".format(response.status_code))
-        if response.status_code == 200:
-            films = response.json()
-            # Filtrer les films par titre
-            if title_query:
-                films = [film for film in films if title_query.lower() in film["Title"].lower()]
-
-            films_paginated = films[skip: skip + films_per_page]
-        else:
-            flash("Erreur lors de la récupération des films.", "danger")
-            films_paginated = []
-    except requests.exceptions.RequestException as e:
-        flash(f"Erreur de connexion à l'API : {e}", "danger")
-        films_paginated = []
-
-    return render_template("films.html", films=films_paginated, page=page)
-"""
 # ---route vers la page de Connexion ---
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -219,52 +191,7 @@ def get_all_films():
     else:
         return []  # Si la requête échoue, retourne une liste vide
 
-"""
-# ---Route vers la page  d'ajout d'un film ---
-@app.route('/films/add_film', methods=['GET', 'POST'])
-@login_required
-def add_film():
-    ""Permet d'ajouter un film.""
-    #films = get_all_films()
-    if request.method == 'POST':
-        data = {
-            "Title": request.form.get('title', '').strip(),
-            "Year": request.form.get('year', '').strip(),
-            "Runtime": request.form.get('runtime', '').strip(),
-            "Genre": request.form.get('genre', '').split(",") ,
-            "Writer": request.form.get('writer', '').strip(),
-            "Actors": request.form.get('actors', '').split(","),
-            "Plot": request.form.get('plot', '').strip(),
-            "Language": request.form.get('language', '').split(","),
-            "Poster": request.form.get('poster', '').strip(),
-            "format": request.form.get('format', '').strip()
-        }
-    
-        token = session.get('token')
-        try:
-            # Envoi de la requête POST avec les données et l'en-tête d'autorisation
-            response = requests.post(f"{API_URL}/films/add_film", json=data, headers={'Authorization': f'Bearer {token}'})
-                    
-            # Afficher le code de statut HTTP et la réponse brute pour le débogage
-            print("Code de statut HTTP : {}".format(response.status_code))
-            print("Réponse brute : {}".format(response.text))
 
-            # Vérification du code d'état de la réponse
-            if response.status_code == 200 or response.status_code == 201:
-                flash("Film ajouté avec succès.", "success")
-                return redirect(url_for('accueil'))
-            else:
-                try:
-                    error_message = response.json().get("error", "Erreur lors de l'ajout du film.")
-                except ValueError:
-                    error_message = f"Erreur lors du décodage de la réponse JSON : {response.text}"
-                flash(error_message, "danger")
-        except requests.RequestException as e:
-            flash(f"Erreur de connexion : {e}", "danger")
-    #return render_template('add_film.html', username=session.get('username'), films =films)
-    return render_template('add_film.html', username=session.get('username'))
-
-"""
 
 @app.route('/films/add_film', methods=['GET', 'POST'])
 @login_required
