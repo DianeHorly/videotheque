@@ -138,27 +138,6 @@ def verifier_connexion():
     return session['username']
 
 # route pour ajouter un film
-"""@app.route('/films/add_film', methods=['POST'])
-def add_film():
-    username = verifier_connexion()
-    
-    data = request.json
-    print("************************************************")
-
-    if not data or "Title" not in data:
-        return jsonify({"error": "Titre du film manquant"}), 400
-
-    try:
-        if mongo.db.films.find_one({"Title": data["Title"]}):
-            return jsonify({"error": "Ce film existe déjà"}), 400
-        # Ajout de l'utilisateur qui ajoute le film
-        data["add_by"] = username
-        mongo.db.films.insert_one(data)
-        return jsonify({"message": "Film ajouté avec succès", "film": data}), 201
-    except Exception as e:
-        return jsonify({"error": f"Erreur lors de l'ajout du film : {e}"}), 500
-"""
-
 @app.route('/films/add_film', methods=['POST'])
 def add_film():
     username = verifier_connexion()
@@ -243,35 +222,6 @@ def recherche_film():
     except Exception as e:
         return jsonify({"error": f"Erreur lors de la recherche du film : {e}"}), 500
 
-"""
-# route pour visualiser la liste des films
-@app.route('/films', methods=['GET'])
-def consulter_films():
-    page = int(request.args.get('page', 1)) 
-    per_page = int(request.args.get('per_page', 10))  
-    skip = (page - 1) * per_page
-    try:
-        films = list(mongo.db.films.find({}, {"_id": 0}).skip(skip).limit(per_page))
-        if not films:
-            return jsonify({"message": "Aucun film trouvé"}), 404
-        return jsonify(films), 200
-    except Exception as e:
-        return jsonify({"error": f"Erreur lors de la récupération des films : {e}"}), 500
-
-# route pour rechercher un film
-@app.route('/films/recherche', methods=['GET'])
-def recherche_film():
-    query = request.args.get("query", "")
-    try:
-        films = list(mongo.db.films.find({"$or": [
-            {"Title": {"$regex": query, "$options": "i"}},
-            {"Director": {"$regex": query, "$options": "i"}},
-            {"Genre": {"$regex": query, "$options": "i"}}
-        ]}, {"_id": 0}))
-        return jsonify(films), 200
-    except Exception as e:
-        return jsonify({"error": f"Erreur lors de la recherche du film : {e}"}), 500
-"""
 # route pour modifier un film
 @app.route('/films/<string:title>', methods=['PUT'])
 def modifie_film(title):
