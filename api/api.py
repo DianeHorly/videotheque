@@ -159,10 +159,11 @@ def add_film():
     except Exception as e:
         return jsonify({"error": f"Erreur lors de l'ajout du film : {e}"}), 500
 """
-from bson import ObjectId
-
 @app.route('/films/add_film', methods=['POST'])
 def add_film():
+    """username, status_code = verifier_connexion()
+    if status_code == 401:  # If verifier_connexion returns an error response
+        return jsonify(username), status_code"""
     username = session.get('username')
     data = request.json
     print("************************************************")
@@ -176,8 +177,7 @@ def add_film():
             return jsonify({"error": "Ce film existe déjà"}), 400
         # Ajout de l'utilisateur qui ajoute le film
         data["add_by"] = username
-        result = mongo.db.films.insert_one(data)
-        data["_id"] = str(result.inserted_id)  # Convert ObjectId to string
+        mongo.db.films.insert_one(data)
         return jsonify({"message": "Film ajouté avec succès", "film": data}), 201
     except Exception as e:
         print(f"Erreur lors de l'ajout du film : {e}")
