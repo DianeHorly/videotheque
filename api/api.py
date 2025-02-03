@@ -3,6 +3,7 @@ from flask_pymongo import PyMongo
 from flask_bcrypt import Bcrypt
 import json
 import os
+from bson import ObjectId
 
 app = Flask(__name__)
 
@@ -134,8 +135,8 @@ def logout():
 # fonction pour vérifier si l'utilisateur est connecté
 def verifier_connexion():
     if 'username' not in session:
-        return jsonify({"error": "Veuillez vous connecter"}), 401
-    return session['username']
+        return {"error": "Veuillez vous connecter"}, 401
+    return session['username'], 200
 
 # route pour ajouter un film
 """@app.route('/films/add_film', methods=['POST'])
@@ -158,13 +159,11 @@ def add_film():
     except Exception as e:
         return jsonify({"error": f"Erreur lors de l'ajout du film : {e}"}), 500
 """
+from bson import ObjectId
 
 @app.route('/films/add_film', methods=['POST'])
 def add_film():
-    username = verifier_connexion()
-    if isinstance(username, dict):  # If verifier_connexion returns an error response
-        return username
-    
+    username = session.get('username')
     data = request.json
     print("************************************************")
     print(data)
@@ -177,12 +176,12 @@ def add_film():
             return jsonify({"error": "Ce film existe déjà"}), 400
         # Ajout de l'utilisateur qui ajoute le film
         data["add_by"] = username
-        mongo.db.films.insert_one(data)
+        result = mongo.db.films.insert_one(data)
+        data["_id"] = str(result.inserted_id)  # Convert ObjectId to string
         return jsonify({"message": "Film ajouté avec succès", "film": data}), 201
     except Exception as e:
         print(f"Erreur lors de l'ajout du film : {e}")
         return jsonify({"error": f"Erreur lors de l'ajout du film : {e}"}), 500
-
 # route pour visualiser la liste des films
 @app.route('/films', methods=['GET'])
 def consulter_films():

@@ -9,7 +9,7 @@ from functools import wraps
 app = Flask(__name__)
 # clé secrete pour garantir que les sessions restent valides même si le serveur est rechargé
 #app.secret_key ="admin@&12?" 
-app.secret_key = os.environ.get('SECRET_KEY', 'admin@&12?')
+app.secret_key = os.environ.get('SECRET_KEY', 'diane@&12?')
 
 # URL de l'API ,lien vers l'api
 API_URL = "http://api:5001"
@@ -146,9 +146,10 @@ def films():
     return render_template("films.html", films=films_paginated, page=page)
 """
 # ---route vers la page de Connexion ---
+"""
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    """Permet de gérer la connexion des utilisateurs."""
+    #Permet de gérer la connexion des utilisateurs.
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
@@ -167,7 +168,30 @@ def login():
                 flash(response.json().get("error", "Identifiants incorrects."), "error")
         except requests.RequestException as e:
             flash(f"Erreur de connexion : {e}", "danger")
+    return render_template('login1.html') """
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    """Permet de gérer la connexion des utilisateurs."""
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        if not username or not password:
+            flash("Tous les champs sont obligatoires.", "error")
+            return redirect(url_for('login'))
+        try:
+            response = requests.post(f"{API_URL}/login", json={"username": username, "password": password})
+            if response.status_code == 200:
+                session['username'] = username
+                session['token'] = response.json().get('token')
+                flash("Connexion réussie !", "success")
+                return redirect(url_for('accueil'))
+            else:
+                flash(response.json().get("error", "Identifiants incorrects."), "error")
+        except requests.RequestException as e:
+            flash(f"Erreur de connexion : {e}", "danger")
     return render_template('login1.html')
+
 
 # --- Route vers la page d'inscription ---
 @app.route('/register', methods=['GET', 'POST'])
@@ -265,9 +289,9 @@ def add_film():
     return render_template('add_film.html', username=session.get('username'))
 
 """
-
+# ---Route vers la page d'ajout d'un film ---
 @app.route('/films/add_film', methods=['GET', 'POST'])
-@login_required
+#@login_required
 def add_film():
     """Ajouter un film."""
     if request.method == 'POST':
@@ -301,7 +325,7 @@ def add_film():
             # Vérification du code d'état de la réponse
             if response.status_code in [200, 201]:
                 flash("Film ajouté avec succès.", "success")
-                return redirect(url_for('films'))
+                return redirect(url_for('accueil'))
             else:
                 try:
                     response_json = response.json()
